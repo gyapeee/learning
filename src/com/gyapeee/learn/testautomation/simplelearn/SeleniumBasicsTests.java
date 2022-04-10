@@ -1,11 +1,16 @@
 package com.gyapeee.learn.testautomation.simplelearn;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 /**
- * <p> Base page of the examples: https://www.simplilearn.com/tutorials/selenium-tutorial/selenium-interview-questions-and-answers</p>
+ * <p> Base page of the examples: https://www.simplilearn
+ * .com/tutorials/selenium-tutorial/selenium-interview-questions-and-answers</p>
  *
  * <h2>Table of content</h2>
  * <ul>
@@ -24,9 +29,27 @@ import org.junit.jupiter.api.TestMethodOrder;
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class SeleniumBasicsTests {
+    WebDriver driver;
+
+    public static final String SELENIUM_HOME_PAGE_URL = "https://www.selenium.dev/";
+
+    @BeforeEach
+    void initEach() {
+        WebDriverManager.chromedriver()
+                        .setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--kiosk");
+        this.driver = new ChromeDriver(options);
+    }
+
+    @AfterEach
+    void cleanUpEach() {
+        this.driver.quit();
+    }
 
     @Test
     void TC_01_What_are_the_Selenium_suite_components_THEORETICAL() {
+        System.out.println("Selenium IDE\n" + "\n" + "It is a Firefox/Chrome plug-in that was developed to speed up " + "the creation of automation scripts. " + "\n" + "It records the user actions on the web browser and " + "exports them as a reusable script.");
     }
 
     @Test
@@ -52,6 +75,42 @@ public class SeleniumBasicsTests {
     @Test
     void TC_07_Mention_the_types_of_Web_locators() {
 
+        this.driver.get(SELENIUM_HOME_PAGE_URL);
+        // Find by id
+        WebElement logoByID = this.driver.findElement(By.id("selenium_logo"));
+        Assertions.assertEquals("svg", logoByID.getTagName());
+
+        // Find by linktext
+        WebElement documentationByLinkText = this.driver.findElement(By.linkText("Documentation"));
+        documentationByLinkText.click();
+        this.driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
+
+
+        // Find by partial linktext
+        WebElement documentationByPartialLinkText = this.driver.findElement(By.partialLinkText("W3C"));
+        documentationByPartialLinkText.click();
+
+        this.driver.get(SELENIUM_HOME_PAGE_URL + "documentation");
+        // Find by XPath
+        this.driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
+
+        // Find by name
+        //driver.findElement(By.name("books")).click();
+
+        // Find by TagName
+        this.driver.findElement(By.tagName("a"))
+                   .click();
+
+        this.driver.get(SELENIUM_HOME_PAGE_URL);
+
+        // Find element by className
+        this.driver.findElement(By.className("nav-link"));
+
+        this.driver.get(SELENIUM_HOME_PAGE_URL);
+        
+        // Find by cssSelector
+        this.driver.findElement(By.cssSelector("input[type=search]"))
+                   .sendKeys("WASD");
     }
 
     @Test
