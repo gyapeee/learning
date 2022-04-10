@@ -12,10 +12,12 @@ public class FactoryTest {
     public WebDriver getDriver(String browser) {
 
         if (browser.equals("Chrome")) {
-            WebDriverManager.chromedriver().setup();
+            WebDriverManager.chromedriver()
+                            .setup();
             return new ChromeDriver();
         } else if (browser.equals("Firefox")) {
-            WebDriverManager.firefoxdriver().setup();
+            WebDriverManager.firefoxdriver()
+                            .setup();
             return new FirefoxDriver();
         }
         return null;
