@@ -34,4 +34,9 @@ public class SeleniumNonSimpleLearnTests {
         // https://www.lambdatest.com/blog/page-factory-in-selenium/
 
     }
+
+    @Test
+    void TC_35_How_to_be_sure_that_test_finds_the_exact_Element() {
+        // Add test or QA ID for each element on the frontend to get the element faster
+    }
 }
