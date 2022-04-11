@@ -107,7 +107,7 @@ public class SeleniumBasicsTests {
         this.driver.findElement(By.className("nav-link"));
 
         this.driver.get(SELENIUM_HOME_PAGE_URL);
-        
+
         // Find by cssSelector
         this.driver.findElement(By.cssSelector("input[type=search]"))
                    .sendKeys("WASD");
@@ -115,7 +115,9 @@ public class SeleniumBasicsTests {
 
     @Test
     void TC_08_What_are_the_types_of_waits_supported_by_WebDriver() {
-
+        // Implicit wait
+        // Explicit wait
+        // Fluent wait
     }
 
     @Test
