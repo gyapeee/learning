@@ -3,10 +3,16 @@ package com.gyapeee.learn.testautomation.simplelearn;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 /**
  * <p> Base page of the examples: https://www.simplilearn
@@ -116,8 +122,21 @@ public class SeleniumBasicsTests {
     @Test
     void TC_08_What_are_the_types_of_waits_supported_by_WebDriver() {
         // Implicit wait
+        this.driver.manage()
+                   .timeouts()
+                   .implicitlyWait(Duration.ofSeconds(10));
+
         // Explicit wait
+        WebDriverWait wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("")));
+
+        // TODO What is the difference between FluentWait and WebDriver(explicit wait)
+
         // Fluent wait
+        FluentWait fluentWait = new FluentWait(this.driver).withTimeout(Duration.ofSeconds(10))
+                                                           .pollingEvery(Duration.ofMillis(100))
+                                                           .ignoring(StaleElementReferenceException.class);
+        fluentWait.withMessage("Polling Time is expired");
     }
 
     @Test

@@ -13,6 +13,8 @@ import org.junit.jupiter.api.TestMethodOrder;
  * <li>32. How to add an extension to the browser?</li>
  * <li>33. What is Bot Pattern?</li>
  * <li>34. What is Page Factory in Selenium?</li>
+ * <li>35. How to be sure that test finds the exact Element?</li>
+ * <li>36. How to download file?</li>
  * </ul>
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
@@ -38,5 +40,10 @@ public class SeleniumNonSimpleLearnTests {
     @Test
     void TC_35_How_to_be_sure_that_test_finds_the_exact_Element() {
         // Add test or QA ID for each element on the frontend to get the element faster
+    }
+
+    @Test
+    void TC_36_How_to_download_file() {
+        // https://www.swtestacademy.com/how-to-download-file-in-selenium/
     }
 }
