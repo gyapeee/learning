@@ -3,16 +3,21 @@ package com.gyapeee.learn.testautomation.simplelearn;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Clock;
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  * <p> Base page of the examples: https://www.simplilearn
@@ -45,12 +50,12 @@ public class SeleniumBasicsTests {
                         .setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--kiosk");
-        this.driver = new ChromeDriver(options);
+        driver = new ChromeDriver(options);
     }
 
     @AfterEach
     void cleanUpEach() {
-        this.driver.quit();
+        driver.quit();
     }
 
     @Test
@@ -81,62 +86,152 @@ public class SeleniumBasicsTests {
     @Test
     void TC_07_Mention_the_types_of_Web_locators() {
 
-        this.driver.get(SELENIUM_HOME_PAGE_URL);
+        driver.get(SELENIUM_HOME_PAGE_URL);
         // Find by id
-        WebElement logoByID = this.driver.findElement(By.id("selenium_logo"));
+        WebElement logoByID = driver.findElement(By.id("selenium_logo"));
         Assertions.assertEquals("svg", logoByID.getTagName());
 
         // Find by linktext
-        WebElement documentationByLinkText = this.driver.findElement(By.linkText("Documentation"));
+        WebElement documentationByLinkText = driver.findElement(By.linkText("Documentation"));
         documentationByLinkText.click();
-        this.driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
+        driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
 
 
         // Find by partial linktext
-        WebElement documentationByPartialLinkText = this.driver.findElement(By.partialLinkText("W3C"));
+        WebElement documentationByPartialLinkText = driver.findElement(By.partialLinkText("W3C"));
         documentationByPartialLinkText.click();
 
-        this.driver.get(SELENIUM_HOME_PAGE_URL + "documentation");
+        driver.get(SELENIUM_HOME_PAGE_URL + "documentation");
         // Find by XPath
-        this.driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
+        driver.findElement(By.xpath("//h1[contains(text(),'The Selenium Browser Automation Project')]"));
 
         // Find by name
         //driver.findElement(By.name("books")).click();
 
         // Find by TagName
-        this.driver.findElement(By.tagName("a"))
-                   .click();
+        driver.findElement(By.tagName("a"))
+              .click();
 
-        this.driver.get(SELENIUM_HOME_PAGE_URL);
+        driver.get(SELENIUM_HOME_PAGE_URL);
 
         // Find element by className
-        this.driver.findElement(By.className("nav-link"));
+        driver.findElement(By.className("nav-link"));
 
-        this.driver.get(SELENIUM_HOME_PAGE_URL);
+        driver.get(SELENIUM_HOME_PAGE_URL);
 
         // Find by cssSelector
-        this.driver.findElement(By.cssSelector("input[type=search]"))
-                   .sendKeys("WASD");
+        driver.findElement(By.cssSelector("input[type=search]"))
+              .sendKeys("WASD");
     }
 
     @Test
     void TC_08_What_are_the_types_of_waits_supported_by_WebDriver() {
-        // Implicit wait
-        this.driver.manage()
-                   .timeouts()
-                   .implicitlyWait(Duration.ofSeconds(10));
+        driver.get(SELENIUM_HOME_PAGE_URL);
 
+        implicitWait();
+
+        explicityWait();
+
+        fluentWait();
+    }
+
+    /**
+     * It stops the execution of the test while the passed condition is false.
+     * Continues the thread immediately when the condition is true.
+     * It has a polling time as a period for evaluating the condition.
+     * It also has a timeout so if the condition is false after the timeout
+     * then the TimeoutException is thrown. NoSuchElementException is ignored by default.
+     */
+    private void explicityWait() {
         // Explicit wait
-        WebDriverWait wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("")));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        wait.pollingEvery(Duration.ofMillis(20));
 
-        // TODO What is the difference between FluentWait and WebDriver(explicit wait)
+        // False
+        wrapWithTryCatchAssertTrue(() -> wait.until(ExpectedConditions.elementToBeClickable(By.id(
+                "ThisIdISNotExisting"))));
 
+        wrapWithTryCatchAssertTrue(() -> wait.until(driver -> driver.findElement(By.id("ThisIdISNotExisting"))));
+
+        // True
+        WebElement e = wait.until(driver -> driver.findElement(By.id("selenium_logo")));
+        Assertions.assertEquals("svg", e.getTagName());
+    }
+
+    /**
+     * Implicit wait is a global setting, so findElement fires
+     * NoSuchElementException when the WebDriver cannot
+     * find the element after timeout expires
+     */
+    private void implicitWait() {
+        // After 10 seconds the NoSuchElementException will be fired
+        driver.manage()
+              .timeouts()
+              .implicitlyWait(Duration.ofSeconds(3));
+
+        // Check the log that the 3 seconds has passed
+        wrapWithTryCatchAssertTrue(() -> driver.findElement(By.id("ThisIdISNotExisting")));
+    }
+
+    /**
+     * It stops the execution of the test while the passed condition is false.
+     * Continues the thread immediately when the condition is true.
+     * It has a polling time as a period for evaluating the condition.
+     * It also has a timeout so if the condition is false after the timeout
+     * then the NoSuchElementException is thrown.
+     * Or the NoSuchElementException is ignored then TimeOutException is raised
+     */
+    private void fluentWait() {
         // Fluent wait
-        FluentWait fluentWait = new FluentWait(this.driver).withTimeout(Duration.ofSeconds(10))
-                                                           .pollingEvery(Duration.ofMillis(100))
-                                                           .ignoring(StaleElementReferenceException.class);
-        fluentWait.withMessage("Polling Time is expired");
+        Wait<WebDriver> waitNoSuchElementException = new FluentWait<>(driver).withTimeout(Duration.ofSeconds(2))
+                                                                             .pollingEvery(Duration.ofMillis(20));
+
+        // False
+        wrapWithTryCatchAssertTrue(() -> waitNoSuchElementException.until(driver -> driver.findElement(By.id(
+                "ThisIdISNotExisting"))));
+
+        // Ignoring NoSuchElementException
+        Wait<WebDriver> wait = new FluentWait<>(driver).withTimeout(Duration.ofSeconds(1))
+                                                       .pollingEvery(Duration.ofMillis(200))
+                                                       .ignoring(NoSuchElementException.class);
+
+        // False
+        wrapWithTryCatchAssertTrue(() -> wait.until(driver -> driver.findElement(By.id("ThisIdISNotExisting"))));
+
+        // True
+        WebElement e = wait.until(driver -> driver.findElement(By.id("selenium_logo")));
+        Assertions.assertEquals("svg", e.getTagName());
+    }
+
+    /**
+     * This method wraps the runnable with try catch block
+     * and bypasses the Exception
+     * Also wraps with logging timestamp to the console.
+     *
+     * @param runnable the runnable to be wrapped
+     */
+    private void wrapWithTryCatchAssertTrue(Runnable runnable) {
+        try {
+            System.out.println(System.lineSeparator());
+            System.out.println("BEGIN " + Thread.currentThread()
+                                                .getStackTrace()[2].getMethodName());
+            printTimeStamp();
+            runnable.run();
+        } catch (Exception e) {
+            System.out.println("Name of the actual Exception: " + e.getClass()
+                                                                   .getSimpleName());
+            printTimeStamp();
+            System.out.println("END " + Thread.currentThread()
+                                              .getStackTrace()[2].getMethodName());
+        }
+    }
+
+    /**
+     * Just to print the actual timestamp
+     */
+    private void printTimeStamp() {
+        System.out.println(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
+                                            .format(ZonedDateTime.now(Clock.systemUTC())));
     }
 
     @Test
@@ -152,5 +247,6 @@ public class SeleniumBasicsTests {
     @Test
     void TC_11_What_makes_Selenium_such_a_widely_used_testing_tool_THEORETICAL() {
     }
+
 
 }
