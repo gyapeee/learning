@@ -2,10 +2,7 @@ package com.gyapeee.learn.testautomation.simplelearn;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -49,7 +46,7 @@ public class SeleniumBasicsTests {
         WebDriverManager.chromedriver()
                         .setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--kiosk");
+        options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
     }
 
@@ -133,22 +130,40 @@ public class SeleniumBasicsTests {
     }
 
     @Test
-    void TC_09_Mention_the_types_of_navigation_commands() {
+    void TC_09_Mention_the_types_of_navigation_commands() throws InterruptedException {
         // this is the longer version of get() below
         driver.navigate()
               .to(SELENIUM_HOME_PAGE_URL + "/about");
+        Thread.sleep(1000);
         driver.get(SELENIUM_HOME_PAGE_URL);
+        Thread.sleep(1000);
         driver.navigate()
               .back();
+        Thread.sleep(1000);
         driver.navigate()
               .forward();
+        Thread.sleep(1000);
         driver.navigate()
               .refresh();
+        Thread.sleep(1000);
     }
 
     @Test
-    void TC_10_What_is_the_major_difference_between_close_and_quit() {
-
+    void TC_10_What_is_the_major_difference_between_close_and_quit() throws InterruptedException {
+        driver.navigate()
+              .to(SELENIUM_HOME_PAGE_URL);
+        Thread.sleep(1000);
+        driver.switchTo()
+              .newWindow(WindowType.TAB);
+        Thread.sleep(1000);
+        driver.switchTo()
+              .newWindow(WindowType.TAB);
+        Thread.sleep(1000);
+        // closes the current tab or if it is the last then the window also
+        driver.close();
+        Thread.sleep(1000);
+        // quits the WebDriver so all the tabs are closed and the window also
+        driver.quit();
     }
 
     @Test
