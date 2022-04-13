@@ -127,13 +127,34 @@ public class SeleniumBasicsTests {
     @Test
     void TC_08_What_are_the_types_of_waits_supported_by_WebDriver() {
         driver.get(SELENIUM_HOME_PAGE_URL);
-
         implicitWait();
-
         explicityWait();
-
         fluentWait();
     }
+
+    @Test
+    void TC_09_Mention_the_types_of_navigation_commands() {
+        // this is the longer version of get() below
+        driver.navigate()
+              .to(SELENIUM_HOME_PAGE_URL + "/about");
+        driver.get(SELENIUM_HOME_PAGE_URL);
+        driver.navigate()
+              .back();
+        driver.navigate()
+              .forward();
+        driver.navigate()
+              .refresh();
+    }
+
+    @Test
+    void TC_10_What_is_the_major_difference_between_close_and_quit() {
+
+    }
+
+    @Test
+    void TC_11_What_makes_Selenium_such_a_widely_used_testing_tool_THEORETICAL() {
+    }
+
 
     /**
      * It stops the execution of the test while the passed condition is false.
@@ -233,20 +254,4 @@ public class SeleniumBasicsTests {
         System.out.println(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
                                             .format(ZonedDateTime.now(Clock.systemUTC())));
     }
-
-    @Test
-    void TC_09_Mention_the_types_of_navigation_commands() {
-
-    }
-
-    @Test
-    void TC_10_What_is_the_major_difference_between_close_and_quit() {
-
-    }
-
-    @Test
-    void TC_11_What_makes_Selenium_such_a_widely_used_testing_tool_THEORETICAL() {
-    }
-
-
 }
