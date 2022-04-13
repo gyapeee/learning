@@ -37,7 +37,7 @@ import java.time.format.FormatStyle;
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class SeleniumBasicsTests {
-    WebDriver driver;
+    private WebDriver driver;
 
     public static final String SELENIUM_HOME_PAGE_URL = "https://www.selenium.dev/";
 
