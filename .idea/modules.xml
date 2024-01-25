@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NewPositionLearning.iml" filepath="$PROJECT_DIR$/NewPositionLearning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testautomation.iml" filepath="$PROJECT_DIR$/testautomation.iml" />
     </modules>
   </component>
 </project>
