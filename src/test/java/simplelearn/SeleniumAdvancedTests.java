@@ -1,4 +1,4 @@
-package com.gyapeee.learn.testautomation.simplelearn;
+package simplelearn;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
