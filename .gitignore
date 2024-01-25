@@ -1,3 +1,6 @@
 # Project exclude paths
 /target/
 /.idea/libraries/
+/.idea/libraries/*
+.idea/
+.idea/*
