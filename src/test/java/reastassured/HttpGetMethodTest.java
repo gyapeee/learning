@@ -1,37 +1,17 @@
 package reastassured;
 
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reastassured.dto.BookingsDTO;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static io.restassured.RestAssured.given;
-import static reastassured.Globals.PING_ENDPOINT;
 import static reastassured.Globals.RESTFUL_BROKER_BASE_URL;
 
-public class HttpGetMethodTest {
-
-    @BeforeEach
-    public void verifyHealthCheck() {
-        //@formatter:off
-        Response response = given()
-            .baseUri(RESTFUL_BROKER_BASE_URL)
-            .contentType(ContentType.JSON)
-        .when()
-            .get(PING_ENDPOINT)
-        .then()
-            .extract()
-                .response();
-
-    Assertions.assertEquals(response.getStatusCode() ,HttpURLConnection.HTTP_CREATED);
-        //@formatter:on
-    }
+public class HttpGetMethodTest extends TestBase {
 
 
     @Test
@@ -42,7 +22,7 @@ public class HttpGetMethodTest {
             .baseUri(RESTFUL_BROKER_BASE_URL)
             .contentType(ContentType.JSON)
         .when()
-            .get("/booking")
+            .get(Globals.BOOKING_PATH)
         .then()
             .extract()
             .response()

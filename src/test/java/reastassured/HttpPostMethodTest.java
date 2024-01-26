@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
-public class HttpPostMethodTest {
+public class HttpPostMethodTest extends TestBase {
 
     public static final String AUTH_PAYLOAD = new JSONObject()
         .put("username", "admin")
@@ -36,7 +36,7 @@ public class HttpPostMethodTest {
     .then()
         .log().all()
         .extract().response();
-        //@formatter:on
+    //@formatter:on
 
         return response.jsonPath().getString("token");
     }
@@ -47,10 +47,9 @@ public class HttpPostMethodTest {
             .baseUri(Globals.RESTFUL_BROKER_BASE_URL)
             .contentType(ContentType.JSON)
             .body(POST_PAYLOAD)
-            //.header("Cookie", "token=" + authToken)
             .log().all()
         .when()
-            .post("/booking")
+            .post(Globals.BOOKING_PATH)
         .then()
             .log().all()
             .assertThat()

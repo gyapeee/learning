@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
-public class HttpPutMethodTest {
+public class HttpPutMethodTest extends TestBase {
 
     public static final String PUT_PAYLOAD = new JSONObject()
         .put("firstname", "David")
