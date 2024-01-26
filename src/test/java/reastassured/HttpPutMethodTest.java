@@ -2,6 +2,7 @@ package reastassured;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class HttpPutMethodTest extends TestBase {
 
     @Test
     public void updateBooking() {
-        int bookingId = HttpPostMethodTest.getBookingId();
+        int bookingId = HttpPostMethodTest.getBookingIdOfNewlyCreatedBooking();
         String accessToken = HttpPostMethodTest.getAuthToken();
 
         //@formatter:off
@@ -39,7 +40,7 @@ public class HttpPutMethodTest extends TestBase {
         .then()
             .log().all()
             .assertThat()
-            .statusCode(200)
+            .statusCode(HttpStatus.SC_OK)
             .extract().response();
         //@formatter:on
 

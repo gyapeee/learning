@@ -2,6 +2,7 @@ package reastassured;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ public class HttpPostMethodTest extends TestBase {
         return response.jsonPath().getString("token");
     }
 
-    static int getBookingId() {
+    static int getBookingIdOfNewlyCreatedBooking() {
         //@formatter:off
         Response response = given()
             .baseUri(Globals.RESTFUL_BROKER_BASE_URL)
@@ -53,7 +54,7 @@ public class HttpPostMethodTest extends TestBase {
         .then()
             .log().all()
             .assertThat()
-            .statusCode(200)
+            .statusCode(HttpStatus.SC_OK)
             .extract().response();
         //@formatter:on
 
